@@ -1,178 +1,3 @@
-class BatteryOptimizerCardEditor extends HTMLElement {
-  setConfig(config) {
-    this._config = config;
-  }
-
-  set hass(hass) {
-    this._hass = hass;
-    if (!this.content) {
-      this.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 12px; padding: 8px;">
-          <div class="field">
-            <label style="display: block; margin-bottom: 4px; font-weight: 500;">Заголовок / Title:</label>
-            <input type="text" id="title" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-          </div>
-
-          <div class="field" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Мова / Language:</label>
-              <select id="language" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-                <option value="auto">Авто (за мовою HA)</option>
-                <option value="uk">Українська</option>
-                <option value="en">English</option>
-              </select>
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Орієнтація / Layout:</label>
-              <select id="layout" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-                <option value="horizontal">Горизонтальна (Horizontal)</option>
-                <option value="vertical">Вертикальна (Vertical)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label style="display: block; margin-bottom: 4px; font-weight: 500;">Режим порівняння / Comparison Mode:</label>
-            <select id="compare_mode" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-              <option value="split">Окремо / Паралельно (Split)</option>
-              <option value="overlay">Накладання / Прозорість (Overlay)</option>
-            </select>
-          </div>
-          
-          <div class="field">
-            <label style="display: block; margin-bottom: 4px; font-weight: 500;">Профіль робочих днів / Workday Profile:</label>
-            <ha-entity-picker id="entity_workday" .hass="${this._hass}"></ha-entity-picker>
-          </div>
-
-          <div class="field">
-            <label style="display: block; margin-bottom: 4px; font-weight: 500;">Профіль вихідних / Weekend Profile:</label>
-            <ha-entity-picker id="entity_weekend" .hass="${this._hass}"></ha-entity-picker>
-          </div>
-
-          <div class="field">
-            <label style="display: block; margin-bottom: 4px; font-weight: 500;">Реальний лічильник (kWh) / Real Energy Sensor:</label>
-            <ha-entity-picker id="sensor_real" .hass="${this._hass}"></ha-entity-picker>
-          </div>
-
-          <div class="field" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Колір прогнозу / Bar Color:</label>
-              <input type="color" id="bar_color" style="width: 100%; height: 36px; border: none; cursor: pointer; background: transparent;">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Колір реального / Real Color:</label>
-              <input type="color" id="real_color" style="width: 100%; height: 36px; border: none; cursor: pointer; background: transparent;">
-            </div>
-          </div>
-
-          <div class="field" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Прозорість прогнозу (0-1) / Bar Opacity:</label>
-              <input type="number" id="bar_opacity" min="0" max="1" step="0.05" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Прозорість реального (0-1) / Real Opacity:</label>
-              <input type="number" id="real_opacity" min="0" max="1" step="0.05" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-            </div>
-          </div>
-
-          <div class="field" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Колір акценту / Accent Color:</label>
-              <input type="color" id="current_color" style="width: 100%; height: 36px; border: none; cursor: pointer; background: transparent;">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Розмір шрифту / Font Size:</label>
-              <input type="text" id="font_size" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-            </div>
-          </div>
-
-          <div class="field" style="display: flex; gap: 10px;">
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Висота бару / Bar Size:</label>
-              <input type="text" id="bar_height" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-            </div>
-            <div style="flex: 1;">
-              <label style="display: block; margin-bottom: 4px; font-weight: 500;">Відступ / Gap:</label>
-              <input type="text" id="row_gap" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--divider-color); background: var(--card-background-color); color: var(--primary-text-color);">
-            </div>
-          </div>
-        </div>
-      `;
-      this.content = true;
-
-      this.querySelectorAll('input, select').forEach(element => {
-        element.addEventListener('input', (e) => this._valueChanged(e));
-        element.addEventListener('change', (e) => this._valueChanged(e));
-      });
-
-      this.querySelectorAll('ha-entity-picker').forEach(picker => {
-        picker.addEventListener('value-changed', (e) => this._entityChanged(e));
-      });
-    }
-
-    if (this._config) {
-      this.querySelector('#title').value = this._config.title || '';
-      this.querySelector('#language').value = this._config.language || 'auto';
-      this.querySelector('#layout').value = this._config.layout || 'horizontal';
-      this.querySelector('#compare_mode').value = this._config.compare_mode || 'split';
-      this.querySelector('#entity_workday').value = this._config.entity_workday || '';
-      this.querySelector('#entity_weekend').value = this._config.entity_weekend || '';
-      this.querySelector('#sensor_real').value = this._config.sensor_real || '';
-      this.querySelector('#bar_color').value = this._config.bar_color || '#3498db';
-      this.querySelector('#real_color').value = this._config.real_color || '#2ecc71';
-      this.querySelector('#bar_opacity').value = this._config.bar_opacity !== undefined ? this._config.bar_opacity : 0.4;
-      this.querySelector('#real_opacity').value = this._config.real_opacity !== undefined ? this._config.real_opacity : 0.85;
-      this.querySelector('#current_color').value = this._config.current_color || '#f39c12';
-      this.querySelector('#font_size').value = this._config.font_size || '14px';
-      this.querySelector('#bar_height').value = this._config.bar_height || '16px';
-      this.querySelector('#row_gap').value = this._config.row_gap || '6px';
-      
-      this.querySelector('#entity_workday').hass = this._hass;
-      this.querySelector('#entity_weekend').hass = this._hass;
-      this.querySelector('#sensor_real').hass = this._hass;
-    }
-  }
-
-  _entityChanged(ev) {
-    if (!this._config || !this._hass) return;
-    const target = ev.target;
-    const field = target.id;
-    const value = ev.detail.value;
-
-    this._config = {
-      ...this._config,
-      [field]: value,
-    };
-
-    this.dispatchEvent(new CustomEvent('config-changed', {
-      detail: { config: this._config },
-      bubbles: true,
-      composed: true,
-    }));
-  }
-
-  _valueChanged(ev) {
-    if (!this._config || !this._hass) return;
-    const target = ev.target;
-    const field = target.id;
-    const value = target.type === 'number' ? parseFloat(target.value) : target.value;
-
-    this._config = {
-      ...this._config,
-      [field]: value,
-    };
-
-    this.dispatchEvent(new CustomEvent('config-changed', {
-      detail: { config: this._config },
-      bubbles: true,
-      composed: true,
-    }));
-  }
-}
-
-customElements.define('battery-optimizer-card-editor', BatteryOptimizerCardEditor);
-
 class BatteryOptimizerCard extends HTMLElement {
   constructor() {
     super();
@@ -180,6 +5,7 @@ class BatteryOptimizerCard extends HTMLElement {
     this._activeTab = (day === 0 || day === 6) ? 'weekend' : 'workday';
     this._realHourlyData = {};
     this._lastFetchedDate = '';
+    this._currentDay = new Date().toISOString().split('T')[0];
   }
 
   static getConfigElement() {
@@ -211,6 +37,14 @@ class BatteryOptimizerCard extends HTMLElement {
   }
 
   set hass(hass) {
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    if (this._currentDay !== todayStr) {
+      this._currentDay = todayStr;
+      this._lastFetchedDate = '';
+      this._realHourlyData = {};
+    }
+
     if (!this.content) {
       this.innerHTML = `
         <ha-card>
@@ -256,7 +90,7 @@ class BatteryOptimizerCard extends HTMLElement {
       const history = await hass.callApi('GET', `history/period/${startTime}?filter_entity_id=${entityId}`);
       
       if (history && history[0] && history[0].length > 0) {
-        this._processHistoryData(history[0]);
+        this._processHistoryData(history[0], todayStr);
         this._lastFetchedDate = todayStr;
         this._lastEntity = entityId;
         this._updateContent(hass);
@@ -266,30 +100,37 @@ class BatteryOptimizerCard extends HTMLElement {
     }
   }
 
-  _processHistoryData(states) {
+  _processHistoryData(states, todayStr) {
     const hourly = {};
     for (let i = 0; i < 24; i++) {
       hourly[String(i).padStart(2, '0')] = 0;
     }
 
     const points = [];
+    const todayMidnight = new Date(`${todayStr}T00:00:00`).getTime();
+
     states.forEach(item => {
-      const val = parseFloat(item.state);
-      if (!isNaN(val)) {
-        points.push({
-          time: new Date(item.last_updated),
-          val: val
-        });
+      const itemTime = new Date(item.last_updated).getTime();
+      if (itemTime >= todayMidnight) {
+        const val = parseFloat(item.state);
+        if (!isNaN(val)) {
+          points.push({
+            time: new Date(item.last_updated),
+            val: val
+          });
+        }
       }
     });
 
-    if (points.length === 0) return;
+    if (points.length === 0) {
+      this._realHourlyData = hourly;
+      return;
+    }
 
     points.sort((a, b) => a.time - b.time);
 
-    const getValueAtHour = (targetHour) => {
-      const targetTime = new Date(points[0].time);
-      targetTime.setHours(targetHour, 0, 0, 0);
+    const getValueAtHour = (targetHour, targetDateStr) => {
+      const targetTime = new Date(`${targetDateStr}T${String(targetHour).padStart(2, '0')}:00:00`);
 
       let closest = points[0];
       let minDiff = Math.abs(points[0].time - targetTime);
@@ -305,15 +146,22 @@ class BatteryOptimizerCard extends HTMLElement {
       return closest.val;
     };
 
+    const currentHour = new Date().getHours();
+
     for (let i = 0; i < 24; i++) {
+      // ЗАХИСТ: Не рахуємо і не виводимо реальні дані для годин, які ще не настали або тривають прямо зараз (якщо сенсор наростаючий підсумок)
+      if (i > currentHour) {
+        hourly[String(i).padStart(2, '0')] = 0;
+        continue;
+      }
+
       const hourStr = String(i).padStart(2, '0');
-      
-      const startVal = getValueAtHour(i);
-      const endVal = getValueAtHour(i + 1);
+      const startVal = getValueAtHour(i, todayStr);
+      const endVal = getValueAtHour(i + 1, todayStr);
 
       if (startVal !== null && endVal !== null) {
         const diff = endVal - startVal;
-        if (diff >= 0 && diff < 20) {
+        if (diff >= 0 && diff < 50) {
           hourly[hourStr] = parseFloat(diff.toFixed(3));
         }
       }
@@ -385,7 +233,6 @@ class BatteryOptimizerCard extends HTMLElement {
 
     const nowHour = new Date().getHours();
     
-    // ГЛОБАЛЬНИЙ МАКСИМУМ СЕРЕД УСІХ ЗНАЧЕНЬ (прогноз + реальність)
     let maxVal = 0.001;
     for (let i = 0; i < 24; i++) {
       let hourStr = String(i).padStart(2, '0');
@@ -478,7 +325,7 @@ class BatteryOptimizerCard extends HTMLElement {
               </div>
               <div style="width: 65px; text-align: right; font-family: monospace; font-size: ${fontSize};">
                 <div>${val.toFixed(2)}</div>
-                <div style="font-size: 0.85em; color: ${realColor};">${realVal.toFixed(2)}</div>
+                <div style="font-size: 0.85em; color: ${realColor};">${realVal > 0 ? realVal.toFixed(2) : '0.00'}</div>
               </div>
             </div>
           `;
@@ -496,7 +343,7 @@ class BatteryOptimizerCard extends HTMLElement {
               </div>
               <div style="width: 65px; text-align: right; font-family: monospace; font-size: ${fontSize};">
                 <div>${val.toFixed(2)}</div>
-                <div style="font-size: 0.85em; color: ${realColor};">${realVal.toFixed(2)}</div>
+                <div style="font-size: 0.85em; color: ${realColor};">${realVal > 0 ? realVal.toFixed(2) : '0.00'}</div>
               </div>
             </div>
           `;
@@ -523,6 +370,7 @@ class BatteryOptimizerCard extends HTMLElement {
 }
 
 customElements.define('battery-optimizer-card', BatteryOptimizerCard);
+
 
 // Реєстрація картки в меню вибору (Card Picker)
 window.customCards = window.customCards || [];

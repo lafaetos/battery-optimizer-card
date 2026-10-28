@@ -1,4 +1,4 @@
-class HourlyConsumptionCardEditor extends HTMLElement {
+class BatteryOptimizerCardEditor extends HTMLElement {
   setConfig(config) {
     this._config = config;
   }
@@ -171,9 +171,9 @@ class HourlyConsumptionCardEditor extends HTMLElement {
   }
 }
 
-customElements.define('hourly-consumption-card-editor', HourlyConsumptionCardEditor);
+customElements.define('battery-optimizer-card-editor', BatteryOptimizerCardEditor);
 
-class HourlyConsumptionCard extends HTMLElement {
+class BatteryOptimizerCard extends HTMLElement {
   constructor() {
     super();
     const day = new Date().getDay();
@@ -183,7 +183,7 @@ class HourlyConsumptionCard extends HTMLElement {
   }
 
   static getConfigElement() {
-    return document.createElement('hourly-consumption-card-editor');
+    return document.createElement('battery-optimizer-card-editor');
   }
 
   static getStubConfig() {
@@ -262,7 +262,7 @@ class HourlyConsumptionCard extends HTMLElement {
         this._updateContent(hass);
       }
     } catch (e) {
-      console.error('Hourly Consumption Card: Помилка завантаження історії', e);
+      console.error('Battery Optimizer Card: Помилка завантаження історії', e);
     }
   }
 
@@ -522,4 +522,13 @@ class HourlyConsumptionCard extends HTMLElement {
   }
 }
 
-customElements.define('hourly-consumption-card', HourlyConsumptionCard);
+customElements.define('battery-optimizer-card', BatteryOptimizerCard);
+
+// Реєстрація картки в меню вибору (Card Picker)
+window.customCards = window.customCards || [];
+window.customCards.push({
+  type: "battery-optimizer-card",
+  name: "Battery Optimizer Card",
+  description: "Картка для відображення прогнозу споживання та порівняння з реальним лічильником.",
+  preview: true,
+});

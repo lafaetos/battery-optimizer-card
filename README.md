@@ -53,3 +53,8 @@ Custom Lovelace UI card for the [Home Assistant Battery Optimizer](https://githu
 5. Select category: **Lovelace**.
 6. Click **Add**.
 7. Find **Battery Optimizer Card** in the list, click **Download**, and refresh your browser.
+
+
+<img width="1018" height="1138" alt="image" src="https://github.com/user-attachments/assets/6b2d74e8-9510-4ad0-9ed3-460b5896e4a8" />
+<img width="510" height="968" alt="image" src="https://github.com/user-attachments/assets/bb5a498b-6c48-40e2-a1f6-f5b0f8015af1" />
+
